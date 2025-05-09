@@ -4,3 +4,5 @@
 *.db
 goodtech/__pycache__
 goodtech/spiders/__pycache__
+html
+backend/node_modules
