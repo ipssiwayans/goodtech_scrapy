@@ -6,7 +6,11 @@
 import scrapy
 
 
-class GoodtechItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+class ArticleItem(scrapy.Item):
+    titre = scrapy.Field()
+    date_publication = scrapy.Field()
+    contenu = scrapy.Field()
+    thumbnail = scrapy.Field()
+    images = scrapy.Field()
+    tags = scrapy.Field()
+    url = scrapy.Field()
