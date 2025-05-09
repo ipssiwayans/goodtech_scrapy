@@ -9,7 +9,7 @@ app.use(express.json());
 
 // Connexion à MongoDB local
 mongoose
-  .connect("mongodb://localhost:27017/goodtech", {})
+  .connect(process.env.MONGO_URI, {})
   .then(() => console.log("Connected to local MongoDB"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
