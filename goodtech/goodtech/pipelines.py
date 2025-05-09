@@ -7,14 +7,15 @@
 # useful for handling different item types with a single interface
 from itemadapter import ItemAdapter
 import pymongo
+from scrapy.exceptions import DropItem
 
 
-class MongoDBPipeline:
-    collection_name = 'articles'
-
+class GoodtechPipeline:
     def __init__(self, mongo_uri, mongo_db):
         self.mongo_uri = mongo_uri
         self.mongo_db = mongo_db
+        self.client = None
+        self.db = None
 
     @classmethod
     def from_crawler(cls, crawler):
@@ -31,15 +32,32 @@ class MongoDBPipeline:
         self.client.close()
 
     def process_item(self, item, spider):
-        # Vérifier si l'article existe déjà (basé sur l'URL)
-        existing = self.db[self.collection_name].find_one({'url': item['url']})
-        if existing:
-            # Mettre à jour l'article existant
-            self.db[self.collection_name].update_one(
-                {'url': item['url']},
-                {'$set': ItemAdapter(item).asdict()}
-            )
-        else:
-            # Insérer un nouvel article
-            self.db[self.collection_name].insert_one(ItemAdapter(item).asdict())
-        return item
+        try:
+            if spider.name == "article_detail":
+                # Traiter les articles complets
+                collection = "articles"
+                existing = self.db[collection].find_one({'url': item['url']})
+                if existing:
+                    # Mettre à jour l'article existant
+                    self.db[collection].update_one(
+                        {'url': item['url']},
+                        {'$set': ItemAdapter(item).asdict()}
+                    )
+                else:
+                    # Insérer un nouvel article
+                    self.db[collection].insert_one(ItemAdapter(item).asdict())
+            
+            elif spider.name == "recent_articles":
+                # Traiter les articles récents
+                collection = "recent_articles"
+                self.db[collection].update_one(
+                    {"url": item["url"]}, 
+                    {"$set": dict(item)}, 
+                    upsert=True
+                )
+            
+            # Possibilité d'ajouter d'autres spiders ici avec un autre elif
+            
+            return item
+        except Exception as e:
+            raise DropItem(f"Erreur lors de l'insertion/mise à jour de l'item : {e}")
