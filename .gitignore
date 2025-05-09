@@ -2,3 +2,5 @@
 .venv
 *.csv
 *.db
+goodtech/__pycache__
+goodtech/spiders/__pycache__

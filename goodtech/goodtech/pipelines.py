@@ -1,10 +1,8 @@
-# Define your item pipelines here
-#
-# Don't forget to add your pipeline to the ITEM_PIPELINES setting
-# See: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
+class GoodtechPipeline:
+    def process_item(self, item, spider):
+        return item
 
 
-# useful for handling different item types with a single interface
 from itemadapter import ItemAdapter
 import pymongo
 from scrapy.exceptions import DropItem
@@ -55,9 +53,6 @@ class GoodtechPipeline:
                     {"$set": dict(item)}, 
                     upsert=True
                 )
-            
-            # Possibilité d'ajouter d'autres spiders ici avec un autre elif
-            
             return item
         except Exception as e:
             raise DropItem(f"Erreur lors de l'insertion/mise à jour de l'item : {e}")
