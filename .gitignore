@@ -2,7 +2,5 @@
 .venv
 *.csv
 *.db
-goodtech/goodtech/__pycache__
-goodtech/goodtech/spiders/__pycache__
 html
 backend/node_modules
