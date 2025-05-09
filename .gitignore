@@ -3,6 +3,6 @@
 *.csv
 *.db
 goodtech/__pycache__
-goodtech/spiders/__pycache__
+goodtech/goodtech/spiders/__pycache__
 html
 backend/node_modules
