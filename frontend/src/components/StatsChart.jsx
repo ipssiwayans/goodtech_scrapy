@@ -79,10 +79,6 @@ const StatsChart = ({ articles }) => {
       }
     });
 
-    console.log("Current month:", currentMonthKey, "Count:", currentMonthCount);
-    console.log("Current day:", currentDayKey, "Count:", currentDayCount);
-    console.log("Month data:", monthsData);
-
     setStats({
       totalArticles,
       articlesPerMonth: monthsData,
