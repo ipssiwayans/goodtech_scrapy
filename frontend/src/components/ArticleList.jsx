@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import ArticleCard from "./ArticleCard";
 import FilterMenu from "./FilterMenu";
+import StatsChart from "./StatsChart";
 import { fetchAllArticles } from "../services/api";
 
 const ArticleList = () => {
@@ -62,9 +63,10 @@ const ArticleList = () => {
 
   return (
     <div className="max-w-7xl mx-auto p-4">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">
-        Derniers articles #GoodTech
-      </h1>
+      {!loading && allArticles.length > 0 && (
+        <StatsChart articles={allArticles} />
+      )}
+
       <FilterMenu
         search={search}
         onSearch={setSearch}
