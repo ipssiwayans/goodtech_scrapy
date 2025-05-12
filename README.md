@@ -145,6 +145,7 @@ Then open http://localhost:5173 in your browser.
 The project includes two spiders:
 - `recent_articles`: Scrapes recent articles from the main page of goodtech.info
 - `article_detail`: Scrapes detailed information about articles
+- `categories`: Scrapes categories and its articles + counts number of articles within each category
 
 ### Backend API
 - RESTful API built with Express.js
