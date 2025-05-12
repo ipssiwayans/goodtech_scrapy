@@ -1,4 +1,4 @@
-# GoodTech News Aggregator
+# GoodTech 
 
 A full-stack application for scraping, storing, and displaying positive tech news articles from [goodtech.info](https://goodtech.info/).
 
