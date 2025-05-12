@@ -88,11 +88,33 @@ const StatsChart = ({ articles }) => {
     });
   }, [articles]);
 
-  const monthLabels = Object.keys(stats.articlesPerMonth).slice(-6);
-  const monthData = monthLabels.map((month) => stats.articlesPerMonth[month]);
+  const monthLabels = [];
+  const monthData = [];
+  const now = new Date();
 
-  const dayLabels = Object.keys(stats.articlesPerDay).slice(-7);
-  const dayData = dayLabels.map((day) => stats.articlesPerDay[day]);
+  for (let i = 11; i >= 0; i--) {
+    const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    const monthKey = date.toLocaleDateString("fr-FR", {
+      month: "short",
+      year: "numeric",
+    });
+    monthLabels.push(monthKey);
+    monthData.push(stats.articlesPerMonth[monthKey] || 0);
+  }
+
+  const dayLabels = [];
+  const dayData = [];
+
+  for (let i = 6; i >= 0; i--) {
+    const date = new Date();
+    date.setDate(now.getDate() - i);
+    const dayKey = date.toLocaleDateString("fr-FR", {
+      day: "numeric",
+      month: "short",
+    });
+    dayLabels.push(dayKey);
+    dayData.push(stats.articlesPerDay[dayKey] || 0);
+  }
 
   const barChartData = {
     labels: monthLabels,
