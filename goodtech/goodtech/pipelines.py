@@ -18,8 +18,8 @@ class GoodtechPipeline:
     @classmethod
     def from_crawler(cls, crawler):
         return cls(
-            mongo_uri=crawler.settings.get('MONGO_URI', 'mongodb://localhost:27017'),
-            mongo_db=crawler.settings.get('MONGO_DATABASE', 'goodtech')
+            mongo_uri=crawler.settings.get("MONGO_URI", "mongodb://localhost:27017"),
+            mongo_db=crawler.settings.get("MONGO_DATABASE", "goodtech"),
         )
 
     def open_spider(self, spider):
@@ -32,26 +32,19 @@ class GoodtechPipeline:
     def process_item(self, item, spider):
         try:
             if spider.name == "article_detail":
-                # Traiter les articles complets
                 collection = "articles"
-                existing = self.db[collection].find_one({'url': item['url']})
+                existing = self.db[collection].find_one({"url": item["url"]})
                 if existing:
-                    # Mettre à jour l'article existant
                     self.db[collection].update_one(
-                        {'url': item['url']},
-                        {'$set': ItemAdapter(item).asdict()}
+                        {"url": item["url"]}, {"$set": ItemAdapter(item).asdict()}
                     )
                 else:
-                    # Insérer un nouvel article
                     self.db[collection].insert_one(ItemAdapter(item).asdict())
-            
+
             elif spider.name == "recent_articles":
-                # Traiter les articles récents
                 collection = "recent_articles"
                 self.db[collection].update_one(
-                    {"url": item["url"]}, 
-                    {"$set": dict(item)}, 
-                    upsert=True
+                    {"url": item["url"]}, {"$set": dict(item)}, upsert=True
                 )
             return item
         except Exception as e:

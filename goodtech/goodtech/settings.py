@@ -8,10 +8,9 @@ MONGO_URI = "mongodb://localhost:27017/"
 MONGO_DATABASE = "goodtech"
 
 ITEM_PIPELINES = {
-    'goodtech.pipelines.GoodtechPipeline': 300,
+    "goodtech.pipelines.GoodtechPipeline": 300,
 }
 
-# Obey robots.txt rules
 ROBOTSTXT_OBEY = True
 FEED_EXPORT_ENCODING = "utf-8"
 
