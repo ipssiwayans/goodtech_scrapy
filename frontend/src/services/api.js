@@ -12,3 +12,13 @@
        throw new Error('Erreur lors de la récupération des articles');
      }
    };
+
+   // fonction pour récupérer les catégories
+export const fetchCategories = async () => {
+  try {
+    const response = await api.get('/categories');
+    return response.data;
+  } catch (error) {
+    throw new Error('Erreur lors de la récupération des catégories');
+  }
+};

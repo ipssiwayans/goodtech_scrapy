@@ -32,5 +32,33 @@ app.get("/articles", async (req, res) => {
   }
 });
 
+
+// Schéma pour les catégories
+const categorySchema = new mongoose.Schema({
+  category: String,
+  total_articles: Number,
+  last_updated: Date,
+  articles: [{
+    title: String,
+    url: String,
+    date: Date
+  }]
+});
+const Category = mongoose.model("Categories", categorySchema, "category_articles");
+
+// Route pour récupérer les catégories
+app.get("/categories", async (req, res) => {
+  try {
+    const categories = await Category.find().sort({ total_articles: -1 });
+    res.json({ 
+      categories,
+      total: categories.length,
+      totalArticles: categories.reduce((sum, cat) => sum + cat.total_articles, 0)
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
