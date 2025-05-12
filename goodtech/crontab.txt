@@ -1,2 +1,2 @@
 # Run the recent_articles spider every day at 9:50 AM
-3 12 * * * cd /home/stomen/GitHub/goodtech_scrapy/goodtech && /home/stomen/GitHub/goodtech_scrapy/.venv/bin/python run_recent_articles.py >> /home/stomen/GitHub/goodtech_scrapy/goodtech/cron.log 2>&1
+*/5 * * * * cd /home/stomen/GitHub/goodtech_scrapy/goodtech && /home/stomen/GitHub/goodtech_scrapy/.venv/bin/python run_recent_articles.py >> /home/stomen/GitHub/goodtech_scrapy/goodtech/cron.log 2>&1
