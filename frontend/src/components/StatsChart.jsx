@@ -12,6 +12,7 @@ import {
   LineElement,
 } from "chart.js";
 import { Bar, Pie, Line } from "react-chartjs-2";
+import { fetchCategories } from "../services/api";
 
 ChartJS.register(
   CategoryScale,
@@ -31,12 +32,29 @@ const StatsChart = ({ articles }) => {
     articlesPerMonth: {},
     articlesPerDay: {},
   });
+  const [categoryStats, setCategoryStats] = useState({
+    categories: [],
+    total: 0,
+    totalArticles: 0
+  });
+
+  // Effet pour charger les statistiques des catégories
+  useEffect(() => {
+    const loadCategoryStats = async () => {
+      try {
+        const data = await fetchCategories();
+        setCategoryStats(data);
+      } catch (error) {
+        console.error("Erreur lors du chargement des catégories:", error);
+      }
+    };
+    loadCategoryStats();
+  }, []);
 
   useEffect(() => {
     if (!articles || articles.length === 0) return;
 
     const totalArticles = articles.length;
-
     const monthsData = {};
     const daysData = {};
 
@@ -143,6 +161,19 @@ const StatsChart = ({ articles }) => {
     ],
   };
 
+  const categoryChartData = {
+    labels: categoryStats.categories.map(cat => cat.category),
+    datasets: [
+      {
+        label: "Articles par catégorie",
+        data: categoryStats.categories.map(cat => cat.total_articles),
+        backgroundColor: "rgba(255, 99, 132, 0.6)",
+        borderColor: "rgba(255, 99, 132, 1)",
+        borderWidth: 1,
+      },
+    ],
+  };
+
   const options = {
     responsive: true,
     plugins: {
@@ -154,6 +185,32 @@ const StatsChart = ({ articles }) => {
         text: "Statistiques des articles",
       },
     },
+  };
+
+  // Options spécifiques pour le graphique des catégories
+  const categoryOptions = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top",
+      },
+      title: {
+        display: true,
+        text: "Articles par catégorie",
+      },
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        max: 150,  // Limite l'échelle 
+        ticks: {
+          stepSize: 10  // Affiche les graduations tous les 10 articles
+        }
+      }
+    },
+    // Ajout des options d'épaisseur des barres
+    barThickness: 60,  // Définit l'épaisseur des barres en pixels
+    maxBarThickness: 70  // Définit l'épaisseur maximale des barres
   };
 
   return (
@@ -186,7 +243,35 @@ const StatsChart = ({ articles }) => {
           </h3>
           <Line data={lineChartData} options={options} />
         </div>
+        <div>
+        <div className="w-full">
+                  <h3 className="text-lg font-semibold mb-4 text-gray-700">
+                    Articles par catégorie
+                  </h3>
+                  <Bar data={categoryChartData} options={categoryOptions} />
+                </div>
+                <div className="mt-8">
+                        <h3 className="text-lg font-semibold mb-4 text-gray-700">
+                          Détails des catégories
+                        </h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                          {categoryStats.categories.map((category) => (
+                            <div key={category.category} className="bg-gray-50 p-4 rounded-lg shadow">
+                              <h4 className="font-semibold text-gray-800">{category.category}</h4>
+                              <p className="text-gray-600">Articles: {category.total_articles}</p>
+                              <p className="text-sm text-gray-500">
+                                Dernière mise à jour: {new Date(category.last_updated).toLocaleDateString()}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                </div>
+        </div>
+        
       </div>
+
+
+      
     </div>
   );
 };
