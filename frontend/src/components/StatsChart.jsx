@@ -37,7 +37,6 @@ const StatsChart = ({ articles }) => {
     total: 0,
     totalArticles: 0,
   });
-
   useEffect(() => {
     const loadCategoryStats = async () => {
       try {
@@ -316,6 +315,9 @@ const StatsChart = ({ articles }) => {
           </div>
         </div>
       </div>
+
+
+      
     </div>
   );
 };
